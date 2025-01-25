@@ -7,106 +7,72 @@ This project demonstrates the use of an **LSTM (Long Short-Term Memory)** neural
 
 ## Features
 
-- **Data Generation**: Simulates sinusoidal data with a varying amplitude.
-- **Sequence Splitting**: Splits the time series data into input-output pairs for supervised learning.
-- **LSTM Model**: Trains an LSTM model for multi-step forecasting.
-- **Iterative Prediction**: Extends predictions beyond the test dataset.
-- **Visualization**: Plots predictions vs actual test data and extended future predictions.
+- Train a model to predict sinusoidal sequences using LSTM layers.
+- Customize key parameters like sequence length, number of LSTM units, and dataset division.
+- Visualize predictions alongside original data for evaluation.
 
----
+## Parameters
 
-## Requirements
+The class `SinusInfiniteModel` supports a variety of customizable parameters:
 
-To run the project, the following Python libraries are required:
-- `numpy`
-- `matplotlib`
-- `tensorflow`
-- `scikit-learn`
+### Initialization Parameters
 
-You can install these dependencies using pip:
-```bash
-pip install numpy matplotlib tensorflow scikit-learn
-```
-
----
+- **`minimum`**: Determines the sequence steps used for training and prediction.
+- **`n_features`**: Specifies the number of features for each input timestep.
+- **`reps`**: Defines the number of prediction cycles to perform.
+- **`kama`**: Sets the threshold for processing sequence points during iterative prediction.
+- **`timeline_end`**: Specifies the end point of the sinusoidal timeline.
+- **`timeline_step`**: Determines the increment between timeline points.
+- **`train_split`**: Specifies the split point between training and testing datasets.
+- **`lstm_units`**: Defines the number of units (neurons) in the LSTM layer, controlling its capacity.
+- **`lstm_activation`**: Specifies the activation function for the LSTM layer.
+- **`dense_activation`**: Specifies the activation function for the Dense layer.
+- **`loss_function`**: Defines the loss metric for training the model.
+- **`optimizer`**: Specifies the optimization algorithm used for training.
+- **`epochs`**: Defines the number of iterations over the training dataset.
+- **`batch_size`**: Specifies the number of samples processed in each training batch.
 
 ## How It Works
 
-1. **Synthetic Data Creation**:
-   - The script generates a sinusoidal dataset, `y = sin(x) * x`, over a range.
-   - The dataset is split into training and test sets.
-
-2. **Sequence Splitting**:
-   - Data is divided into sequences of `n_steps_in` input steps and `n_steps_out` output steps using the `split_sequence` function.
-
-3. **Data Scaling**:
-   - Min-Max scaling is applied to normalize the input and output data for efficient LSTM training.
-
-4. **LSTM Model Training**:
-   - An LSTM neural network is trained on the scaled training data for multi-step prediction.
-   - The model predicts future values in the test set and beyond.
-
-5. **Iterative Forecasting**:
-   - Future points are predicted iteratively, using the last predictions as inputs for the next step.
-
-6. **Visualization**:
-   - The script produces two plots:
-     - Predicted vs actual values for the test set.
-     - Extended predictions beyond the test set.
-
----
+1. **Data Generation**: A sinusoidal sequence is generated based on the specified timeline parameters.
+2. **Training**: The model is trained on a portion of the data to learn the underlying pattern.
+3. **Prediction**: Iterative predictions are made, extending beyond the training data.
+4. **Visualization**: The predictions and original data are plotted for comparison.
 
 ## Usage
 
-1. Navigate to the project directory:
-   ```bash
-   cd project-directory
-   ```
+### Training the Model
 
-2. Run the Python script:
-   ```bash
-   python LSTM_model_prediction_test.py
-   ```
+```python
+model = SinusInfiniteModel()
+model.train()
+```
 
-3. The script will train the model and display the following:
-   - Predicted vs actual test data.
-   - Future predictions extending beyond the test dataset.
+### Making Predictions and Visualizing
 
----
+```python
+model.predict_and_visualize()
+```
 
-## Code Highlights
+## Visualization
 
-- **LSTM Model**:
-  ```python
-  regression = Sequential()
-  regression.add(LSTM(units=100, activation='relu', input_shape=(X_train.shape[1], n_features)))
-  regression.add(Dense(n_steps_out))
-  regression.compile(loss='mse', optimizer='adam')
-  regression.fit(X_train, y_train, epochs=100, batch_size=32)
-  ```
+The model generates plots to compare the predicted values with the actual data:
+- Cycle-by-cycle predicted values are plotted in orange.
+- The original sequence is plotted in blue.
+- Legends and titles are included for clarity.
 
-- **Iterative Prediction**:
-  ```python
-  while len(alles) > kama:
-      X_test, y_test = split_sequence(alles, n_steps_in, n_steps_out)
-      X_test = x_scaler.transform(X_test)
-      X_test = X_test.reshape(len(X_test), n_steps_in, n_features)
-      y_pred = regression.predict(X_test)
-      alles = np.concatenate((test, pred[len(pred) - 1]), axis=None)
-      points.append(pred[len(pred) - 1])
-  ```
+## Dependencies
 
----
+The project relies on the following libraries:
+- `numpy`
+- `matplotlib`
+- `sklearn`
+- `tensorflow`
 
-## Example Outputs
-
-1. **Predicted vs Actual Test Data**:
-   ![Predicted vs Actual](images/predicted_vs_actual.png)
-
-2. **Extended Predictions**:
-   ![Extended Predictions](images/extended_predictions.png)
-
----
+Install the dependencies using:
+```bash
+pip install numpy matplotlib scikit-learn tensorflow
+```
 
 ## Future Improvements
 
